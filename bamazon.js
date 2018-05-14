@@ -26,8 +26,6 @@ connection.connect(function (err) {
         // query the database for all items being auctioned
         connection.query("SELECT * FROM inventory", function (err, results) {
             if (err) throw err;
-            // once you have the items, prompt the user for which they'd like to bid on
-           console.log(results)
             inquirer
                 .prompt([
                     {
@@ -36,10 +34,11 @@ connection.connect(function (err) {
                         choices: function () {
                             var choiceArray = [];
                             for (var i = 0; i < results.length; i++) {
-                                choiceArray.push(results[i].item);
+                                choiceArray.push(results[i].item + "  In Stock : "+ results[i].stock + " Price " + results[i].price);
+                               // choiceArray.push(results[i].stock);
+
                             }
                             return choiceArray;
-                            console.log(choiceArray)
                         },
                         message: "What would you like to buy?"
                     },
@@ -58,12 +57,12 @@ connection.connect(function (err) {
                         }
                     }
                     // determine if enough in stock
-                    if (chosenItem.instock > parseInt(answer.num)) {
+                    if (chosenItem.stock > parseInt(answer.num)) {
                         connection.query(
                             "UPDATE inventory SET ? WHERE ?",
                             [
                                 {
-                                    instock: chosenItem.instock-answer.num
+                                    stock: chosenItem.stock-answer.num
                                 },
                                 {
                                     id: chosenItem.id
@@ -71,7 +70,7 @@ connection.connect(function (err) {
                             ],
                             function (error) {
                                 if (error) throw err;
-                                console.log("Ok");
+                                console.log("Ok. That will be $" + answer.num*chosenItem.price);
                                // start();
                             }
                         );
