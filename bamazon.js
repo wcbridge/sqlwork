@@ -30,7 +30,7 @@ connection.connect(function (err) {
                 .prompt([
                     {
                         name: "choice",
-                        type: "rawlist",
+                        type: "list",
                         choices: function () {
                             var choiceArray = [];
                             for (var i = 0; i < results.length; i++) {
