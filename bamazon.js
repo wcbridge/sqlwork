@@ -27,6 +27,7 @@ connection.connect(function (err) {
         connection.query("SELECT * FROM inventory", function (err, results) {
             if (err) throw err;
             // once you have the items, prompt the user for which they'd like to bid on
+           console.log(results)
             inquirer
                 .prompt([
                     {
@@ -56,16 +57,8 @@ connection.connect(function (err) {
                             chosenItem = results[i];
                         }
                     }
-                    //console.log(results)
-                    console.log(chosenItem.instock)
-                    console.log(answer.num)
-
-
-
                     // determine if enough in stock
                     if (chosenItem.instock > parseInt(answer.num)) {
-                       // console.log(chosenItem.instock)
-                        console.log(answer)
                         connection.query(
                             "UPDATE inventory SET ? WHERE ?",
                             [
@@ -84,7 +77,6 @@ connection.connect(function (err) {
                         );
                     }
                     else {
-                        // bid wasn't high enough, so apologize and start over
                         console.log("We dont have that many");
                         //start();
                     }
