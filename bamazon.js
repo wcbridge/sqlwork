@@ -1,6 +1,5 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var table = require("table")
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -34,9 +33,7 @@ connection.connect(function (err) {
                         choices: function () {
                             var choiceArray = [];
                             for (var i = 0; i < results.length; i++) {
-                                choiceArray.push(results[i].item)
-                                //need to make this work 
-                                //+ "  In Stock : "+ results[i].stock + " Price " + results[i].price);
+                                choiceArray.push(results[i].item+ "  In Stock : "+ results[i].stock + " Price " + results[i].price);
                                // choiceArray.push(results[i].stock);
 
                             }
@@ -54,11 +51,10 @@ connection.connect(function (err) {
                     // get the information of the chosen item
                     var chosenItem;
                     for (var i = 0; i < results.length; i++) {
-                        if (results[i].item === answer.choice) {
+                        if (results[i].price === parseInt(answer.choice.split(' ')[7])) {
                             chosenItem = results[i];
                         }
                     }
-                   // console.log(chosenItem)
                     // determine if enough in stock
                     if (chosenItem.stock > parseInt(answer.num)) {
                         connection.query(
